@@ -1,0 +1,51 @@
+.displayContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    margin-bottom: 18px;
+
+  .displayCurrent, .displayResult {
+    width: 100%;
+    text-align: end;
+  }
+  
+  .displayCurrent {
+    display: flex;              
+    flex-direction: column;    
+    justify-content: flex-end;  
+    align-items: flex-end;  
+    height: 117px;
+    margin-bottom: 28px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+    color: white;
+    //перенос:
+    word-break: break-word;    
+    overflow: hidden;           
+    text-overflow: ellipsis;  
+  }
+  
+  .displayResult {
+    font-family: 'GeometriaBold', sans-serif;
+    height: 76px;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 80px;
+    color: white;
+   //ограничение ширины контента:
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;  
+  }
+}
+
+
+@media (max-width: 554px) {
+  .displayCurrent{
+    font-size: 4vw; 
+  }
+  .displayResult {
+    font-size: 8vw; 
+  }
+}

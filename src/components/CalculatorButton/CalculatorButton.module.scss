@@ -1,0 +1,39 @@
+.calculatorButton {
+    width: 80px;
+    height: 100%;
+    margin: 0 auto;
+    font-family: 'GeometriaMedium', sans-serif; 
+    font-weight: 500;
+    font-size: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    color: rgba(242, 242, 242, 1);
+  }
+    .calculatorButton:hover {
+      background-color: rgba(255, 255, 255, 0.12); 
+      color: rgba(242, 242, 242, 1);
+    }
+
+.equalsButton {
+  background-color: white;
+  color: rgba(43, 88, 154, 1);
+  transition: 
+    background-color 0.3s, 
+    transform 0.3s;
+}
+  .equalsButton:hover {
+    background-color: white;
+    color: rgba(43, 88, 154, 1);
+    transform: scale(1.1); 
+  }
+
+
+@media (max-width: 554px) {
+  .calculatorButton {
+    //размеры и шрифт кнопок резиновые:
+    width: 18vw; 
+    height: 18vw;
+    font-size: 6vw; 
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",  // Вы можете оставить ES2020 или выбрать другой подходящий уровень
+    "module": "ESNext",  // ESNext или CommonJS, в зависимости от вашего проекта
+    "jsx": "react-jsx",  // Используйте react-jsx для новых версий React (18+)
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "moduleResolution": "node",  // Измените на node для поддержки импорта модулей
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["jest", "@testing-library/jest-dom"]
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'GeometriaBold';
+  src: url('/fonts/geometria_bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeometriaMedium';
+  src: url('/fonts/geometria_medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  font-family: 'GeometriaMedium', sans-serif; 
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    background: linear-gradient(122.76deg, #FFA2A2 4.09%, #FF7B7B 91.04%), #FFFFFF;
+  }
+}
