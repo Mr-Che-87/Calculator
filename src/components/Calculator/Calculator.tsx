@@ -4,13 +4,27 @@ import CalculatorButton from '../CalculatorButton/CalculatorButton';
 import { buttonContent } from '../../content/buttonContent';
 import styles from './Calculator.module.scss';
 
+import { calcResult, applyPercent } from '../../utils/calcUtils';  
+
 const Calculator: React.FC = () => {
   const [expression, setExpression] = useState<string>('');  //стейт текущего выражения
   const [expressionWithEqual, setExpressionWithEqual] = useState<string>(''); //стейт выражения после клика на "="
   const [result, setResult] = useState<string>(''); //стейт результата
   const [hasCalculated, setHasCalculated] = useState<boolean>(false); //добавил механизм продолжения вычислений с результатом после клика на "="
 
- //Хэндлер на клавиатуру:
+
+//Функция для привязки calcResult из util к стейтам:
+const processResult = () => {
+  const { result, expressionWithEqual } = calcResult(expression);
+  setResult(result);
+  setExpressionWithEqual(expressionWithEqual);
+  setHasCalculated(true);
+  setExpression(result); 
+};
+
+
+
+//Хэндлер на клавиатуру:
  useEffect(() => {
   const handleKeyDown = (event: KeyboardEvent) => {
     const allowedKeys = /[0-9+\-*/%√.,]/;
@@ -25,7 +39,7 @@ const Calculator: React.FC = () => {
     } else if (event.key === 'Escape') {
       clearExpression();
     } else if (event.key === 'Enter') {
-      calcResult();
+      processResult();
     } else if (event.key === 'Backspace') {
       handleBackspace();
     } else if (isAllowedKey) {
@@ -39,8 +53,7 @@ const Calculator: React.FC = () => {
   };
 }, [expression]);
 
-
-  //Хэндлер на кнопки:
+//Хэндлер на кнопки:
   const handleButtonClick = (label: string) => {
     if (label === "×") label = "*";
       
@@ -51,11 +64,13 @@ const Calculator: React.FC = () => {
       label = ".";
     }
     if (label === "=" || label === 'Enter') {
-      calcResult();
+      processResult();
     } else if (label === "C" || label === 'Escape') {
       clearExpression();
     } else if (label === "%") {
-      applyPercent();
+      const resultWithPercent = applyPercent(expression); 
+      setExpression(resultWithPercent);
+      setResult(resultWithPercent);
     } else {
       //Если предыдущее выражение завершилось вычислением, и начато новое...
       if (hasCalculated && /[+\-*/√]/.test(label)) {
@@ -78,122 +93,17 @@ const Calculator: React.FC = () => {
       }
     }
   };
-  
-  //Функция для контейнера результата:
-  const calcResult = () => {
-    try {
-      const calculatedResult = calcExpression(expression);
-      if (!isNaN(calculatedResult)) {
-        setResult(calculatedResult.toString());
-        setExpressionWithEqual(expression + "="); //сохраняем выражение с "="
-        setHasCalculated(true); //продолжения вычислений с результатом
-        setExpression(calculatedResult.toString());  
-      } else {
-        setResult("Error");
-      }
-    } catch (error) {
-      setResult("Error");
-    }
-  };
-  
- //Функция для контейнера текущего выражения :
-  const calcExpression = (expr: string): number => {
-    //разбиение строки на токены
-    const tokens = expr.match(/(\d+\.?\d*|\+|-|\*|\/|%|√)/g);
-    if (!tokens) throw new Error("Invalid expression");
-
-    //два стека: один для чисел, другой для операторов
-    const resultStack: number[] = [];
-    const operatorStack: string[] = [];
-
-    //проход по каждому токену (числу или оператору)
-    tokens.forEach((token) => {
-      if (!isNaN(Number(token))) {
-        //если токен — число, кладём его в стек чисел:
-        resultStack.push(Number(token));
-      } else {
-        //если токен — оператор, обрабатываем его:
-        while (
-          operatorStack.length &&
-          mathPriority(operatorStack[operatorStack.length - 1]) >= mathPriority(token)
-        ) {
-          //Выполняем предыдущий оператор, если он имеет равный или более высокий приоритет
-          const operator = operatorStack.pop();
-          const num2 = resultStack.pop();
-          const num1 = resultStack.pop();
-          resultStack.push(applyOperator(num1!, num2!, operator!));
-        }
-        //кладём текущий оператор в стек
-        operatorStack.push(token);
-      }
-    });
-
-    //выполняем оставшиеся операции в стеке операторов
-    while (operatorStack.length) {
-      const operator = operatorStack.pop();
-      const num2 = resultStack.pop();
-      const num1 = resultStack.pop();
-      resultStack.push(applyOperator(num1!, num2!, operator!));
-    }
-      // Округляем результат до 15 знаков после запятой
-      return parseFloat(resultStack[0].toPrecision(15)) || 0;
-  };
-
-  //Приоритет математических операций (скобочек в макете фигмы нет):
-  const mathPriority = (operator: string): number => {
-    switch (operator) {
-      case "+":
-      case "-":
-        return 1;
-      case "*":
-      case "/":
-      case "%":
-        return 2;
-      case "√":
-        return 3;
-      default:
-        return 0;
-    }
-  };
 
 
 
-  //Непосредственно само вычисление:
-  const applyOperator = (num1: number, num2: number, operator: string): number => {
-    switch (operator) {
-      case "+":
-        return num1 + num2;
-      case "-":
-        return num1 - num2;
-      case "*":
-        return num1 * num2;
-      case "/":
-        return num1 / num2;
-      case "%":
-        return num1 % num2;
-      case "√":
-        return Math.sqrt(num2); 
-      default:
-        throw new Error("Unsupported operator");
-    }
-  };
-
-  //клик на "%" приравнивается к "=":
-  const applyPercent = () => {
-      const currentNumber = calcExpression(expression);
-      const resultWithPercent = currentNumber * 100;
-      setExpression(resultWithPercent.toString() + "%");
-      setResult(resultWithPercent.toString() + "%");
-  };
-
-  //Хэндлер чтоб стереть последний введённый символ (кнопки в фигме нет, сделал с клавиатуры):
+ //Хэндлер чтоб стереть последний введённый символ (кнопки в фигме нет, сделал с клавиатуры):
   const handleBackspace = () => {
     if (expression.length > 0) {
       setExpression(expression.slice(0, -1));
     }
   };
 
-  //Хэндлер чтоб стереть всё 
+ //Хэндлер чтоб стереть всё 
   const clearExpression = () => {
     setExpression("");
     setExpressionWithEqual("");
