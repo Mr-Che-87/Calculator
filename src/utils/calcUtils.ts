@@ -1,7 +1,7 @@
 //Функция для контейнера текущего выражения :
 export const calcExpression = (expr: string): number => {
     //разбиение строки на токены
-    const tokens = expr.match(/((?<!\d)-?\d+\.?\d*|\+|-|\*|\/|%|√)/g);      //const tokens = expr.match(/(\d+\.?\d*|\+|-|\*|\/|%|√)/g);
+    const tokens = expr.match(/((?<!\d)-?\d+\.?\d*|\+|-|\*|\/|%|√)/g);      //старое - const tokens = expr.match(/(\d+\.?\d*|\+|-|\*|\/|%|√)/g);
     if (!tokens) throw new Error("Invalid expression");
 
     //два стека: один для чисел, другой для операторов
