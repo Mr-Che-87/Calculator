@@ -33,7 +33,7 @@ beforeEach(() => {
       fireEvent.click(screen.getByText('2'));
       fireEvent.click(screen.getByText('='));
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('2');
+      expect(resultDisplay).toHaveTextContent(/^2$/); //проверка точного совпадения текста
     });
 
     it.each([
@@ -70,7 +70,7 @@ beforeEach(() => {
       fireEvent.click(screen.getByText('√'));
       fireEvent.click(screen.getByText('='));
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('3');
+      expect(resultDisplay).toHaveTextContent(/^3$/);
     });
 
     //проценты:
@@ -78,7 +78,7 @@ beforeEach(() => {
       fireEvent.click(screen.getByText('0.5'));
       fireEvent.click(screen.getByText('%'));
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('50%');
+      expect(resultDisplay).toHaveTextContent(/^50%$/);
     });
   });
 
@@ -104,7 +104,7 @@ beforeEach(() => {
       fireEvent.keyDown(screen.getByRole('textbox'), { key: '2', code: 'Digit2', charCode: 50 });
       fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter', code: 'Enter', charCode: 13 });
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('3');
+      expect(resultDisplay).toHaveTextContent(/^3$/);
     });
   });
 
@@ -129,7 +129,7 @@ beforeEach(() => {
       performOperations();
       fireEvent.click(screen.getByText('='));
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('61');
+      expect(resultDisplay).toHaveTextContent(/^61$/);
     });
   });
 
@@ -145,7 +145,7 @@ beforeEach(() => {
       fireEvent.click(screen.getByText('2'));
       fireEvent.click(screen.getByText('='));
       const resultDisplay = testContainer.querySelector('.displayResult');
-      expect(resultDisplay).toHaveTextContent('2.5');
+      expect(resultDisplay).toHaveTextContent(/^2.5$/);
     });
   });
 
@@ -161,10 +161,10 @@ beforeEach(() => {
     it('should handle Backspace', () => {
       performOperations();
       const displayCurrent = testContainer.querySelector('.displayCurrent');
-      expect(displayCurrent).toHaveTextContent('5-1');
+      expect(displayCurrent).toHaveTextContent(/^5-1$/);
 
       fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Backspace', code: 'Backspace', charCode: 8 });
-      expect(displayCurrent).toHaveTextContent('5-');
+      expect(displayCurrent).toHaveTextContent(/^5-$/);
     });
 
     it('should handle Escape ', () => {
@@ -173,8 +173,8 @@ beforeEach(() => {
       const resultDisplay = testContainer.querySelector('.displayResult');
 
       fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Escape', code: 'Escape', charCode: 27 });
-       expect(displayCurrent).toHaveTextContent('0');
-       expect(resultDisplay).toHaveTextContent('0');
+       expect(displayCurrent).toHaveTextContent(/^0$/);
+       expect(resultDisplay).toHaveTextContent(/^0$/);
   });
 });
 
