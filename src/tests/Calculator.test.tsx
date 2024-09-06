@@ -3,8 +3,8 @@ import Calculator from '../components/Calculator/Calculator';
 
 let testContainer: HTMLElement;
 beforeEach(() => {
-  const renderResult = render(<Calculator />);
-  testContainer = renderResult.container;
+  const { container } = render(<Calculator />); //container - св-во объекта render (HTMLElement)
+  testContainer = container;
 });
 
 //тест инициализации:
